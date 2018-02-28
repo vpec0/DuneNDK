@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY release "v06_45_01">
+<!ENTITY file_type "mc">
+<!ENTITY run_type "physics">
+<!ENTITY name "comsic_calib">
+<!ENTITY tag "wallbank">
+]>
+
+<project name="&name;">
+
+  <!-- Group -->
+  <group>dune</group>
+
+  <!-- Operating System -->
+  <os>SL6</os>
+
+  <!-- Batch resources -->
+  <resource>DEDICATED,OPPORTUNISTIC,OFFSITE</resource>
+  <!-- <resource>DEDICATED,OPPORTUNISTIC</resource> -->
+
+  <!-- Larsoft information -->
+  <larsoft>
+    <tag>&release;</tag>
+    <qual>e14:prof</qual>
+    <local>/pnfs/dune/persistent/users/wallbank/karlisgreat.tar</local>
+  </larsoft>
+
+  <!-- dune35t metadata parameters -->
+
+  <parameter name ="MCName">&name;</parameter>
+  <parameter name ="MCDetectorType">10kt</parameter>
+  <parameter name ="MCGenerators">MUSUN</parameter>
+
+  <!-- Project stages -->
+
+  <stage name="gen">
+    <fcl>prodMUSUN_dune10kt.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/wallbank/&release;/gen/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/wallbank/work/&release;/gen/&name;</workdir>
+    <output>&name;_${PROCESS}_%tc_gen.root</output>
+    <TFileName>&name;_${PROCESS}_gen_hist.root</TFileName>
+    <numjobs>1000</numjobs>
+    <numevents>1000000</numevents>
+    <jobsub>--memory=4000 --expected-lifetime=long</jobsub>
+    <defname>&name;_&tag;</defname>
+  </stage>
+
+  <stage name="g4">
+    <fcl>standard_g4_dune10kt.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/wallbank/&release;/g4/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/wallbank/work/&release;/g4/&name;</workdir>
+    <output>&name;_${PROCESS}_%tc_g4.root</output>
+    <TFileName>&name;_${PROCESS}_g4_hist.root</TFileName>
+    <numjobs>1000</numjobs>
+    <numevents>-1</numevents>
+    <jobsub>--memory=4000 --expected-lifetime=long</jobsub>
+    <defname>&name;_&tag;</defname>
+  </stage>
+
+  <stage name="ana">
+    <fcl>/dune/app/users/wallbank/larsoft-pdk/workspace/protonDecay/cosmo_calib.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/wallbank/&release;/ana/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/wallbank/work/&release;/ana/&name;</workdir>
+    <TFileName>&name;_${PROCESS}_ana_hist.root</TFileName>
+    <numjobs>1000</numjobs>
+    <numevents>-1</numevents>
+    <jobsub>--memory=4000 --expected-lifetime=long</jobsub>
+    <defname>&name;_&tag;</defname>
+  </stage>
+
+  <!-- file type -->
+  <filetype>&file_type;</filetype>
+
+  <!-- run type -->
+  <runtype>&run_type;</runtype>
+
+</project>

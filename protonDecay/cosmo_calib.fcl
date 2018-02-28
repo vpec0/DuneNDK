@@ -1,0 +1,35 @@
+#include "pdkcosmobg.fcl"
+
+process_name: CosmoCalib
+
+services:
+{
+  TFileService: { fileName: "cosmo_calib.root" }
+  MemoryTracker:         {}
+  TimeTracker:           {}
+  RandomNumberGenerator: {} #ART native random number generator
+  message:               @local::dune_message_services_prod
+  FileCatalogMetadata:   @local::art_file_catalog_mc
+                         @table::dunefd_reco_services
+
+}
+
+services.scheduler.SkipEvent: [ProductNotFound]
+
+source:
+{
+  module_type: RootInput
+  maxEvents:  -1        # Number of events to create
+}
+
+physics:
+{
+  analyzers:
+  {
+    cosmocalib: @local::cosmocalib
+  }
+
+  a1: [ cosmocalib ]
+  end_paths: [ a1 ]
+
+}

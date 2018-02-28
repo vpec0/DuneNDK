@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY release "v06_45_01">
+<!ENTITY file_type "mc">
+<!ENTITY run_type "physics">
+<!ENTITY name "pdkcosmobg">
+<!ENTITY tag "wallbank">
+]>
+
+<project name="&name;">
+
+  <!-- Group -->
+  <group>dune</group>
+
+  <!-- Operating System -->
+  <os>SL6</os>
+
+  <!-- Batch resources -->
+  <resource>DEDICATED,OPPORTUNISTIC,OFFSITE</resource>
+  <!-- <resource>DEDICATED,OPPORTUNISTIC</resource> -->
+
+  <!-- Larsoft information -->
+  <larsoft>
+    <tag>&release;</tag>
+    <qual>e14:prof</qual>
+    <local>/pnfs/dune/persistent/users/wallbank/karlisgreat.tar</local>
+  </larsoft>
+
+  <!-- dune35t metadata parameters -->
+
+  <parameter name ="MCName">&name;</parameter>
+  <parameter name ="MCDetectorType">10kt</parameter>
+  <parameter name ="MCGenerators">MUSUN</parameter>
+
+  <!-- Project stages -->
+
+  <stage name="detsim">
+    <fcl>/dune/app/users/wallbank/larsoft-pdk/workspace/job/pdk_filter_detsim.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/wallbank/&release;/detsim/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/wallbank/work/&release;/detsim/&name;</workdir>
+    <inputlist>/pnfs/dune/persistent/users/wallbank/mctruth_files.list</inputlist>
+    <output>&name;_${PROCESS}_%tc_filter_detsim.root</output>
+    <TFileName>&name;_${PROCESS}_filter_detsim_hist.root</TFileName>
+    <numjobs>10000</numjobs>
+    <numevents>-1</numevents>
+    <jobsub>--memory=4000 --expected-lifetime=long --maxConcurrent=50</jobsub>
+    <defname>&name;_&tag;</defname>
+  </stage>
+
+  <stage name="reco">
+    <fcl>/dune/app/users/wallbank/larsoft-pdk/workspace/job/pdk_reco.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/wallbank/&release;/reco/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/wallbank/work/&release;/reco/&name;</workdir>
+    <output>&name;_${PROCESS}_%tc_reco.root</output>
+    <TFileName>&name;_${PROCESS}_reco_hist.root</TFileName>
+    <numjobs>10000</numjobs>
+    <numevents>-1</numevents>
+    <jobsub>--memory=4000 --expected-lifetime=long --maxConcurrent=50</jobsub>
+    <!-- <targetsize>8000000000</targetsize> -->
+    <datatier>full-reconstructed</datatier>
+    <defname>&name;_&tag;</defname>
+  </stage>
+
+  <stage name="reconana">
+    <fcl>/dune/app/users/wallbank/larsoft-pdk/workspace/protonDecay/pdk_reco_ana.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/wallbank/&release;/reconana/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/wallbank/work/&release;/reconana/&name;</workdir>
+    <inputlist>/pnfs/dune/scratch/users/wallbank/v06_40_00/reco/pdkcosmobg/files.list</inputlist>
+    <TFileName>&name;_${PROCESS}_reconana.root</TFileName>
+    <numjobs>10000</numjobs>
+    <numevents>-1</numevents>
+    <jobsub>--memory=4000 --expected-lifetime=long</jobsub>
+    <!-- <targetsize>8000000000</targetsize> -->
+    <defname>&name;_&tag;</defname>
+  </stage>
+
+  <stage name="ana">
+    <fcl>/dune/app/users/wallbank/larsoft-pdk/workspace/protonDecay/pdk_analysis_reco.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/wallbank/&release;/ana/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/wallbank/work/&release;/ana/&name;</workdir>
+    <inputlist>/pnfs/dune/scratch/users/wallbank/v06_40_00/reco/pdkcosmobg/files.list</inputlist>
+    <TFileName>&name;_${PROCESS}_ana.root</TFileName>
+    <numjobs>10000</numjobs>
+    <numevents>-1</numevents>
+    <jobsub>--memory=4000 --expected-lifetime=long</jobsub>
+    <!-- <targetsize>8000000000</targetsize> -->
+    <defname>&name;_&tag;</defname>
+  </stage>
+
+  <!-- file type -->
+  <filetype>&file_type;</filetype>
+
+  <!-- run type -->
+  <runtype>&run_type;</runtype>
+
+</project>
