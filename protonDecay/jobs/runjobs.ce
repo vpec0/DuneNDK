@@ -1,0 +1,52 @@
+#!/bin/sh
+
+let concurrent=100
+
+mapfile -t jobs < jobs.txt
+
+while : ; do
+
+    trap '' 2
+
+    echo "checking existing jobs"
+    for job in "${jobs[@]}"
+    do
+	status=`glite-ce-job-status $job | grep Status | cut -d\[ -f 2 | cut -d\] -f 1`
+	case "$status" in 
+	    *DONE*)
+		echo "retrieving $job"
+		glite-ce-job-output $job
+		;&
+	    *CANCELLED*|*ABORTED*)
+		glite-ce-job-purge -N $job
+		echo $job $status >> complete.txt
+		;&
+	    jobStatus)
+		jobs=(${jobs[@]/"$job"})
+		;;
+	esac
+    done
+
+    echo "topping up running jobs"
+    while [ ${#jobs[@]} -lt $concurrent ] && [ ! -e runjobs.stop ]; do
+	job=`glite-ce-job-submit -a test.jdl  -r lcgce1.shef.ac.uk:8443/cream-pbs-dune`
+	echo "job $job submitted"
+	jobs+=($job)
+    done
+    for job in "${jobs[@]}"
+    do
+	echo "$job"
+    done > jobs.txt
+
+    if [ ${#jobs[@]} -eq 0 ]; then
+	exit
+    fi
+
+    trap 2
+
+    echo "sleep 1 minute"
+    sleep 60
+
+done
+
+
