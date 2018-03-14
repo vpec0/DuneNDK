@@ -1,0 +1,9 @@
+[
+JobName = "LArSoft_Job";
+Executable = "/bin/sh";
+Arguments = "-c 'curl -o runlarsoft.sh http://www.hep.shef.ac.uk/tmp/runlarsoft.php && chmod +x runlarsoft.sh && ./runlarsoft.sh '";
+StdOutput = "StdOut";
+StdError = "StdErr";
+OutputSandbox = {"StdOut","StdErr", "nodaq.root"};
+CERequirements = 'other.GlueCEPolicyMaxWallTime >= 2000 && other.GlueHostMainMemoryRAMSize >= 1500';
+]

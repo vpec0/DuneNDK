@@ -1,0 +1,14 @@
+[
+JobName = "LArSoft_Job_%n";
+Executable = "/bin/sh";
+Arguments = "-c 'curl -o runlarsoft.sh http://www.hep.shef.ac.uk/tmp/runlarsoft.php && chmod +x runlarsoft.sh && ./runlarsoft.sh '";
+Parameters = 10000;
+ParameterStart = 1;
+ParameterStep = 1;
+StdOutput = "StdOut";
+StdError = "StdErr";
+OutputSandbox = {"StdOut","StdErr"};
+OutputData = { "nodaq.root" };
+OutputSE = "UKI-NORTHGRID-SHEF-HEP-disk";
+CERequirements = 'other.GlueCEPolicyMaxWallTime >= 2000 && other.GlueHostMainMemoryRAMSize >= 1500';
+]
