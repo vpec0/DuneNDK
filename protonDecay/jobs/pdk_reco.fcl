@@ -1,0 +1,24 @@
+#include "standard_reco_dune10kt.fcl"
+
+process_name: TrackReco
+
+services.scheduler.SkipEvent: [ProductNotFound]
+services.TFileService.fileName: "trackreco_hist.root"
+
+source.inputCommands: [ "keep *_*_*_*" ]
+source.maxEvents: -1
+
+physics.reco: [ rns,
+                ophit, opflash,
+                caldata,
+                gaushit, hitfd,
+                linecluster, trajcluster,
+                trkshowersplit,
+                pandora, #pandora stitcher goes here
+                pandoracalo, pandorapid,
+                pmtrack, pmtrackcalo, pmtrackpid,
+                pmtrajfit, pmtrajfitcalo, pmtrajfitpid,
+                pmtracktc, pmtracktccalo, pmtracktcpid
+              ]
+
+#physics.producers.pmtrack.EmClusterModuleLabel: ""

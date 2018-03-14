@@ -1,0 +1,18 @@
+#include "standard_detsim_dune10kt.fcl"
+
+process_name: FilterDetsim
+
+services.scheduler.SkipEvent: [ProductNotFound]
+services.TFileService.fileName: "filterdetsim_hist.root"
+
+source.inputCommands: [ "keep *_*_*_*" ]
+source.maxEvents: -1
+
+physics.filters.fiducial.module_type: "TruthFiducialFilter"
+
+physics.simulate: [ rns,
+                    fiducial,
+                    daq, opdigi
+                  ]
+
+outputs.out1.SelectEvents: [ "simulate" ]
