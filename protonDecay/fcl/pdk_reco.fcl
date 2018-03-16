@@ -14,8 +14,11 @@ physics.reco: [ rns,
                 gaushit, hitfd,
                 linecluster, trajcluster,
                 trkshowersplit,
+                #pandora
                 pandora, #pandora stitcher goes here
+                pandoraTrack, pandoraShower,
                 pandoracalo, pandorapid,
+                #pmatrack
                 pmtrack, pmtrackcalo, pmtrackpid,
                 pmtrajfit, pmtrajfitcalo, pmtrajfitpid,
                 pmtracktc, pmtracktccalo, pmtracktcpid

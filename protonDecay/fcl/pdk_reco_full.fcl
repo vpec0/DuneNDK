@@ -1,0 +1,37 @@
+#include "standard_reco_dune10kt.fcl"
+
+process_name: TrackReco
+
+services.scheduler.SkipEvent: [ProductNotFound]
+services.TFileService.fileName: "trackreco_hist.root"
+
+source.inputCommands: [ "keep *_*_*_*" ]
+source.maxEvents: -1
+
+physics.reco: [ rns,
+   ophit, opflash,
+   caldata,
+   fasthit,
+   gaushit, hitfd,
+   linecluster, trajcluster,
+   trkshowersplit,
+   #pandora
+   pandora, pandoraTrack, pandoraShower,
+   pandoracalo, pandorapid,
+   #pmatrack
+   pmtrack, pmtrackcalo, pmtrackpid,
+   pmtrajfit, pmtrajfitcalo, pmtrajfitpid,
+   pmtracktc, pmtracktccalo, pmtracktcpid,
+   pmtrajfittc, pmtrajfittccalo, pmtrajfittcpid,
+   #shower reconstruction
+   blurredcluster, emtrkmichelid, emshower#, emshower3d, mergeemshower3d
+                # pandora, #pandora stitcher goes here
+                # pandoracalo, pandorapid,
+                # pmtrack, pmtrackcalo, pmtrackpid,
+                # pmtrajfit, pmtrajfitcalo, pmtrajfitpid,
+                # pmtracktc, pmtracktccalo, pmtracktcpid
+              ]
+
+#physics.trigger_paths: [ reco ]
+
+#physics.producers.pmtrack.EmClusterModuleLabel: ""
