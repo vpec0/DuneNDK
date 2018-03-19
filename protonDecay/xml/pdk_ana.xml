@@ -41,7 +41,7 @@
     <fcl>/dune/app/users/vpec/mikes_pdk/work/fcl/pdk_filter_detsim.fcl</fcl>
     <outdir>/pnfs/dune/scratch/users/vpec/&release;/detsim/&name;</outdir>
     <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/detsim/&name;</workdir>
-    <inputlist>/pnfs/dune/persistent/users/vpec/mctruth_files.list</inputlist>
+    <inputlist>/pnfs/dune/persistent/users/vpec/mctruth_files_short.list</inputlist>
     <logdir>/dune/data/users/vpec/log/&release;/detsim/&name;</logdir>
     <output>&name;_${PROCESS}_%tc_filter_detsim.root</output>
     <TFileName>&name;_${PROCESS}_filter_detsim_hist.root</TFileName>
@@ -76,14 +76,14 @@
     <numjobs>1</numjobs>
     <maxfilesperjob>1</maxfilesperjob>
     <numevents>-1</numevents>
-    <jobsub>--memory=2560 --expected-lifetime=long</jobsub>
+    <jobsub>--memory=2560 --expected-lifetime=3m</jobsub>
     <!-- <targetsize>8000000000</targetsize> -->
     <defname>&name;_&tag;_reconana</defname>
     <ana>1</ana>
   </stage>
 
   <stage name="ana">
-    <fcl>/dune/app/users/vpec/larsoft-pdk/workspace/protonDecay/pdk_analysis_reco.fcl</fcl>
+    <fcl>/dune/app/users/vpec/mikes_pdk/work/fcl/pdk_analysis_reco.fcl</fcl>
     <outdir>/pnfs/dune/scratch/users/vpec/&release;/ana/&name;</outdir>
     <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/ana/&name;</workdir>
     <!-- <inputlist>/pnfs/dune/scratch/users/vpec/&release;/reco/&name;/files.list</inputlist> -->
@@ -92,7 +92,7 @@
     <numjobs>1</numjobs>
     <maxfilesperjob>1</maxfilesperjob>
     <numevents>-1</numevents>
-    <jobsub>--memory=2560 --expected-lifetime=long</jobsub>
+    <jobsub>--memory=2560 --expected-lifetime=3m</jobsub>
     <!-- <targetsize>8000000000</targetsize> -->
     <defname>&name;_&tag;_ana</defname>
     <ana>1</ana>    
