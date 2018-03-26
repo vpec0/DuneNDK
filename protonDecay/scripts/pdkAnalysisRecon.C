@@ -3,9 +3,19 @@
 #include "TVector3.h"
 #include "TMath.h"
 
+#include "TStyle.h"
+#include "TAxis.h"
+#include "TGaxis.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "TH1D.h"
+
+
 #include <iostream>
 #include <vector>
 #include <map>
+#include <string>
+#include <sstream>
 
 void pdkAnalysisRecon() {
 
@@ -22,7 +32,7 @@ void pdkAnalysisRecon() {
   TGaxis::SetMaxDigits(3);
 
   // CUTS --------------------------------
-  
+
   float closeTrackDist = 5; //cm
   float outerSpacePointDist = 2; //cm
   float longTrackLength = 20; //cm
@@ -38,8 +48,7 @@ void pdkAnalysisRecon() {
   edges[2][0]=-1;
   edges[2][1]=5808.87;
 
-  TFile* inFile = new TFile("/pnfs/dune/scratch/users/wallbank/v06_45_01/ana/pdkcosmobg/anahist.root","r");
-  //TFile* inFile = new TFile("pdk_recon.root","r");
+  TFile* inFile = new TFile("data/ana_anahist.root","r");
   TTree* tree = (TTree*)inFile->Get("pdkrecon/PDKRecon");
   if (!tree) {
     std::cout << "Input tree not found." << std::endl;
@@ -96,15 +105,15 @@ void pdkAnalysisRecon() {
       totalDepositedEnergy += fTrackEnergy[track][fTrackBestPlane[track]];
       if (fTrackPDG[track][fTrackBestPlane[track]] == 321)
 	kaonTracks.push_back(track);
-      if (TMath::Abs(fTrackPDG[track][fTrackBestPlane[track]]) == 13 and fTrackLength[track] > longTrackLength)
+      if (TMath::Abs(fTrackPDG[track][fTrackBestPlane[track]]) == 13 && fTrackLength[track] > longTrackLength)
 	longMuonTracks.push_back(track);
       for (int otherTrack = 0; otherTrack < fNTracks; ++otherTrack) {
 	if (track == otherTrack)
 	  continue;
 	TVector3 otherStart = TVector3(fTrackStart[otherTrack]), otherEnd = TVector3(fTrackStart[otherTrack]);
-	if ((start-otherStart).Mag() < closeTrackDist or (start-otherEnd).Mag() < closeTrackDist)
+	if ((start-otherStart).Mag() < closeTrackDist || (start-otherEnd).Mag() < closeTrackDist)
 	  closeFrontTracks[track].push_back(otherTrack);
-	if ((end-otherStart).Mag() < closeTrackDist or (end-otherEnd).Mag() < closeTrackDist)
+	if ((end-otherStart).Mag() < closeTrackDist || (end-otherEnd).Mag() < closeTrackDist)
 	  closeBackTracks[track].push_back(otherTrack);
       }
     }
@@ -112,9 +121,9 @@ void pdkAnalysisRecon() {
     // space points
     for (int spacePoint = 0; spacePoint < fNSpacePoints; ++spacePoint) {
       const float* xyz = fSpacePoint[spacePoint];
-      if ((xyz[0] >= edges[0][0] and xyz[0] < edges[0][0] + outerSpacePointDist) or (xyz[0] <= edges[0][1] and xyz[0] > edges[0][1] - outerSpacePointDist) or
-	  (xyz[1] >= edges[1][0] and xyz[1] < edges[1][0] + outerSpacePointDist) or (xyz[1] <= edges[1][1] and xyz[1] > edges[1][1] - outerSpacePointDist) or
-	  (xyz[2] >= edges[2][0] and xyz[2] < edges[2][0] + outerSpacePointDist) or (xyz[2] <= edges[2][1] and xyz[2] > edges[2][1] - outerSpacePointDist))
+      if ((xyz[0] >= edges[0][0] && xyz[0] < edges[0][0] + outerSpacePointDist) || (xyz[0] <= edges[0][1] && xyz[0] > edges[0][1] - outerSpacePointDist) ||
+	  (xyz[1] >= edges[1][0] && xyz[1] < edges[1][0] + outerSpacePointDist) || (xyz[1] <= edges[1][1] && xyz[1] > edges[1][1] - outerSpacePointDist) ||
+	  (xyz[2] >= edges[2][0] && xyz[2] < edges[2][0] + outerSpacePointDist) || (xyz[2] <= edges[2][1] && xyz[2] > edges[2][1] - outerSpacePointDist))
 	outerSpacePoints.push_back(spacePoint);
     }
 
@@ -134,11 +143,11 @@ void pdkAnalysisRecon() {
 	  // no hits near detector edges
 	  hCutNoOuterSpacePoints->Fill(totalDepositedEnergy);
 
-	  if (!(closeFrontTracks[kaon].size() != 0 and closeBackTracks[kaon].size() != 0)) {
+	  if (!(closeFrontTracks[kaon].size() != 0 && closeBackTracks[kaon].size() != 0)) {
 	    // no activity at both ends of the kaon
 	    hCutNoBothActivity->Fill(totalDepositedEnergy);
 	    std::vector<int> closeTracks;
-	    if (closeFrontTracks[kaon].size() or closeBackTracks[kaon].size())
+	    if (closeFrontTracks[kaon].size() || closeBackTracks[kaon].size())
 	      closeTracks = closeFrontTracks[kaon].size() ? closeFrontTracks[kaon] : closeBackTracks[kaon];
 
 	    if (fTrackEnergy[kaon][fTrackBestPlane[kaon]] <= kaonEnergyCut) {
@@ -186,7 +195,7 @@ void pdkAnalysisRecon() {
   hCutNoLongMuon->SetLineColor(2);
   //hCutNoLongMuon->SetFillColor(2);
   //hCutNoLongMuon->SetFillStyle(3003);
-  hCutNoLongMuon->Draw("same"); 
+  hCutNoLongMuon->Draw("same");
   std::stringstream cutNoLongMuon;
   cutNoLongMuon << "No long muon track (>" << longTrackLength << " cm) (" << hCutNoLongMuon->GetEntries() << ")";
   hCutOneKaon->SetLineWidth(2);
@@ -233,7 +242,7 @@ void pdkAnalysisRecon() {
   leg->AddEntry(hCutKaonEnergy,         cutKaonEnergy.str().c_str(),         "l");
   leg->AddEntry(hCutKaonMass,           cutKaonMass.str().c_str(),           "l");
   leg->Draw();
-  canv->SaveAs("PDKReconSelection.eps");
+  canv->SaveAs("plots/PDKReconSelection.pdf");
   canv->SetLogy(0);
 
   return;
