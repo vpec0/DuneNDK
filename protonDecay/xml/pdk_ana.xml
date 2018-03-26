@@ -6,7 +6,7 @@
 <!ENTITY release "v06_67_01">
 <!ENTITY file_type "mc">
 <!ENTITY run_type "physics">
-<!ENTITY name "pdkcosmobg">
+<!ENTITY name "pdkcosmobg_test3_10">
 <!ENTITY tag "vpec">
 ]>
 
@@ -35,20 +35,24 @@
   <parameter name ="MCDetectorType">10kt</parameter>
   <parameter name ="MCGenerators">MUSUN</parameter>
 
+  <numevents>-1</numevents>
+
   <!-- Project stages -->
 
   <stage name="detsim">
     <fcl>/dune/app/users/vpec/mikes_pdk/work/fcl/pdk_filter_detsim.fcl</fcl>
     <outdir>/pnfs/dune/scratch/users/vpec/&release;/detsim/&name;</outdir>
     <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/detsim/&name;</workdir>
-    <inputlist>/pnfs/dune/persistent/users/vpec/mctruth_files_360.list</inputlist>
+    <inputlist>/pnfs/dune/persistent/users/vpec/mctruth_files_short.list</inputlist>
     <logdir>/dune/data/users/vpec/log/&release;/detsim/&name;</logdir>
     <output>&name;_${PROCESS}_%tc_filter_detsim.root</output>
     <TFileName>&name;_${PROCESS}_filter_detsim_hist.root</TFileName>
-    <numjobs>20</numjobs>
-    <maxfilesperjob>18</maxfilesperjob>
-    <numevents>-1</numevents>
-    <jobsub>--memory=2560 --expected-lifetime=16h --maxConcurrent=50</jobsub>
+    <numjobs>10</numjobs>
+    <disk>2GB</disk>
+    <!-- <maxfilesperjob>18</maxfilesperjob> -->
+    <!-- <numevents>-1</numevents> -->
+    <jobsub>--memory=2500 --expected-lifetime=2h</jobsub>
+    <!-- \-\-maxConcurrent=50 - this would start DAG managed jobs, not compatible with project.py -->
     <defname>&name;_&tag;_detsim</defname>
   </stage>
 
@@ -56,12 +60,14 @@
     <fcl>/dune/app/users/vpec/mikes_pdk/work/fcl/pdk_reco.fcl</fcl>
     <outdir>/pnfs/dune/scratch/users/vpec/&release;/reco/&name;</outdir>
     <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/reco/&name;</workdir>
+    <logdir>/dune/data/users/vpec/log/&release;/reco/&name;</logdir>
     <output>&name;_${PROCESS}_%tc_reco.root</output>
     <TFileName>&name;_${PROCESS}_reco_hist.root</TFileName>
-    <numjobs>1</numjobs>
-    <maxfilesperjob>1</maxfilesperjob>
-    <numevents>-1</numevents>
-    <jobsub>--memory=2560 --expected-lifetime=short --maxConcurrent=50</jobsub>
+    <numjobs>20</numjobs>
+    <!-- <maxfilesperjob>1</maxfilesperjob> -->
+    <!-- <numevents>-1</numevents> -->
+    <disk>200MB</disk>
+    <jobsub>--memory=2560 --expected-lifetime=4h --maxConcurrent=50</jobsub>
     <!-- <targetsize>8000000000</targetsize> -->
     <datatier>full-reconstructed</datatier>
     <defname>&name;_&tag;_reco</defname>
@@ -74,9 +80,9 @@
     <!-- <inputlist>/pnfs/dune/scratch/users/vpec/&release;/reco/&name;/files.list</inputlist> -->
     <TFileName>&name;_${PROCESS}_reconana.root</TFileName>
     <numjobs>1</numjobs>
-    <maxfilesperjob>1</maxfilesperjob>
-    <numevents>-1</numevents>
-    <jobsub>--memory=2560 --expected-lifetime=3m</jobsub>
+    <!-- <maxfilesperjob>1</maxfilesperjob> -->
+    <!-- <numevents>-1</numevents> -->
+    <jobsub>--memory=526 --expected-lifetime=3m</jobsub>
     <!-- <targetsize>8000000000</targetsize> -->
     <defname>&name;_&tag;_reconana</defname>
     <ana>1</ana>
@@ -91,7 +97,7 @@
     <TFileName>&name;_${PROCESS}_ana.root</TFileName>
     <numjobs>1</numjobs>
     <maxfilesperjob>1</maxfilesperjob>
-    <numevents>-1</numevents>
+    <!-- <numevents>-1</numevents> -->
     <jobsub>--memory=2560 --expected-lifetime=3m</jobsub>
     <!-- <targetsize>8000000000</targetsize> -->
     <defname>&name;_&tag;_ana</defname>
