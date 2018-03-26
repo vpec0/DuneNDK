@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY release "v06_67_01">
+<!ENTITY file_type "mc">
+<!ENTITY run_type "physics">
+<!ENTITY name "pdkcosmobg_10by1">
+<!ENTITY tag "vpec">
+]>
+
+<project name="&name;">
+
+  <!-- Group -->
+  <group>dune</group>
+
+  <!-- Operating System -->
+  <os>SL6</os>
+
+  <!-- Batch resources -->
+  <!-- <resource>DEDICATED,OPPORTUNISTIC,OFFSITE</resource> -->
+  <resource>DEDICATED,OPPORTUNISTIC</resource>
+
+  <!-- Larsoft information -->
+  <larsoft>
+    <tag>&release;</tag>
+    <qual>e15:prof</qual>
+    <local>/pnfs/dune/resilient/users/vpec/mikes_pdk/pdk_dunetpc.tar</local>
+  </larsoft>
+
+  <!-- dune10kt metadata parameters -->
+
+  <parameter name ="MCName">&name;</parameter>
+  <parameter name ="MCDetectorType">10kt</parameter>
+  <parameter name ="MCGenerators">MUSUN</parameter>
+
+  <numevents>-1</numevents>
+
+  <!-- Project stages -->
+
+  <stage name="detsim">
+    <fcl>/pnfs/dune/resilient/users/vpec/mikes_pdk/fcl/pdk_filter_detsim.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/vpec/data/&release;/detsim/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/detsim/&name;</workdir>
+    <inputlist>/pnfs/dune/persistent/users/vpec/mctruth_files_short.list</inputlist>
+    <logdir>/pnfs/dune/scratch/users/vpec/log/&release;/detsim/&name;</logdir>
+    <output>&name;_${PROCESS}_%tc_filter_detsim.root</output>
+    <TFileName>&name;_${PROCESS}_filter_detsim_hist.root</TFileName>
+    <numjobs>10</numjobs>
+    <disk>2GB</disk>
+    <!-- <maxfilesperjob>18</maxfilesperjob> -->
+    <!-- <numevents>-1</numevents> -->
+    <jobsub>--memory=2500 --expected-lifetime=2h</jobsub>
+    <defname>&name;_&tag;_detsim</defname>
+  </stage>
+
+  <stage name="reco">
+    <fcl>/pnfs/dune/resilient/users/vpec/mikes_pdk/fcl/pdk_reco.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/vpec/&release;/reco/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/reco/&name;</workdir>
+    <logdir>/pnfs/dune/scratch/users/vpec/log/&release;/reco/&name;</logdir>
+    <output>&name;_${PROCESS}_%tc_reco.root</output>
+    <TFileName>&name;_${PROCESS}_reco_hist.root</TFileName>
+    <numjobs>10</numjobs>
+    <!-- <maxfilesperjob>1</maxfilesperjob> -->
+    <numevents>2</numevents>
+    <disk>2000MB</disk>
+    <memory>2000</memory>
+    <jobsub>--expected-lifetime=4h</jobsub>
+    <datatier>full-reconstructed</datatier>
+    <defname>&name;_&tag;_reco</defname>
+  </stage>
+
+  <stage name="reconana">
+    <fcl>/dune/app/users/vpec/mikes_pdk/work/fcl/pdk_reco_ana.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/vpec/&release;/reconana/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/reconana/&name;</workdir>
+    <!-- <inputlist>/pnfs/dune/scratch/users/vpec/&release;/reco/&name;/files.list</inputlist> -->
+    <TFileName>&name;_${PROCESS}_reconana.root</TFileName>
+    <numjobs>1</numjobs>
+    <!-- <maxfilesperjob>1</maxfilesperjob> -->
+    <!-- <numevents>-1</numevents> -->
+    <jobsub>--memory=526 --expected-lifetime=3m</jobsub>
+    <!-- <targetsize>8000000000</targetsize> -->
+    <defname>&name;_&tag;_reconana</defname>
+    <ana>1</ana>
+  </stage>
+
+  <stage name="ana">
+    <fcl>/dune/app/users/vpec/mikes_pdk/work/fcl/pdk_analysis_reco.fcl</fcl>
+    <outdir>/pnfs/dune/scratch/users/vpec/&release;/ana/&name;</outdir>
+    <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/ana/&name;</workdir>
+    <!-- <inputlist>/pnfs/dune/scratch/users/vpec/&release;/reco/&name;/files.list</inputlist> -->
+    <previousstage>reco</previousstage>
+    <TFileName>&name;_${PROCESS}_ana.root</TFileName>
+    <numjobs>1</numjobs>
+    <maxfilesperjob>1</maxfilesperjob>
+    <!-- <numevents>-1</numevents> -->
+    <jobsub>--memory=2560 --expected-lifetime=3m</jobsub>
+    <!-- <targetsize>8000000000</targetsize> -->
+    <defname>&name;_&tag;_ana</defname>
+    <ana>1</ana>    
+  </stage>
+
+  <!-- file type -->
+  <filetype>&file_type;</filetype>
+
+  <!-- run type -->
+  <runtype>&run_type;</runtype>
+
+</project>
