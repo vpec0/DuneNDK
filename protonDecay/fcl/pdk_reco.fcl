@@ -24,4 +24,7 @@ physics.reco: [ rns,
                 pmtracktc, pmtracktccalo, pmtracktcpid
               ]
 
+source.inputCommands: [ @sequence::source.inputCommands, "drop sumdata::RunData_*_*_*" ]
+
+
 #physics.producers.pmtrack.EmClusterModuleLabel: ""
