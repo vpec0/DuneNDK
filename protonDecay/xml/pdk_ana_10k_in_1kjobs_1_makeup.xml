@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY release "v06_67_01">
+<!ENTITY file_type "mc">
+<!ENTITY run_type "physics">
+<!ENTITY name "pdkcosmobg_10k_in_1kjobs_1">
+<!ENTITY list_name "mctruth_files_10k_1.list">
+<!ENTITY tag "vpec">
+]>
+
+<project name="&name;">
+
+  <!-- Group -->
+  <group>dune</group>
+
+  <!-- Operating System -->
+  <os>SL6</os>
+
+  <!-- Batch resources -->
+  <!-- <resource>DEDICATED,OPPORTUNISTIC,OFFSITE</resource> -->
+  <resource>DEDICATED,OPPORTUNISTIC</resource>
+
+  <!-- Larsoft information -->
+  <larsoft>
+    <tag>&release;</tag>
+    <qual>e15:prof</qual>
+    <local>/pnfs/dune/resilient/users/vpec/mikes_pdk/pdk_dunetpc.tar</local>
+  </larsoft>
+
+  <!-- dune10kt metadata parameters -->
+
+  <parameter name ="MCName">&name;</parameter>
+  <parameter name ="MCDetectorType">10kt</parameter>
+  <parameter name ="MCGenerators">MUSUN</parameter>
+
+  <numevents>-1</numevents>
+
+  <!-- Project stages -->
+
+  <stage name="detsim">
+    <fcl>/pnfs/dune/resilient/users/vpec/mikes_pdk/fcl/pdk_filter_detsim.fcl</fcl>
+    <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/detsim/&name;</workdir>
+
+    <inputlist>/pnfs/dune/persistent/users/vpec/&list_name;</inputlist>
+
+    <logdir>/pnfs/dune/scratch/users/vpec/log/&release;/detsim/&name;</logdir>
+    <outdir>/pnfs/dune/scratch/users/vpec/data/&release;/detsim/&name;</outdir>
+    <output>&name;_${PROCESS}_%tc_filter_detsim.root</output>
+    <TFileName>&name;_${PROCESS}_filter_detsim_hist.root</TFileName>
+
+    <numjobs>1</numjobs>
+    <disk>4GB</disk>
+    <memory>6000</memory>
+    <jobsub>--expected-lifetime=8h</jobsub>
+    <maxfilesperjob>10</maxfilesperjob>
+    <!-- <numevents>10</numevents> -->
+    <defname>&name;_&tag;_detsim</defname>
+  </stage>
+
+  <stage name="reco">
+
+    <fcl>/pnfs/dune/resilient/users/vpec/mikes_pdk/fcl/pdk_reco.fcl</fcl>
+    <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/reco/&name;</workdir>
+
+    <logdir>/pnfs/dune/scratch/users/vpec/log/&release;/reco/&name;</logdir>
+    <outdir>/pnfs/dune/scratch/users/vpec/data/&release;/reco/&name;</outdir>
+    <output>&name;_${PROCESS}_%tc_reco.root</output>
+    <TFileName>&name;_${PROCESS}_reco_hist.root</TFileName>
+
+
+    <numjobs>1000</numjobs>
+    <!-- <maxfilesperjob>1</maxfilesperjob> -->
+    <!-- <numevents>2</numevents> -->
+    <disk>4GB</disk>
+    <memory>2500</memory>
+    <jobsub>--expected-lifetime=8h</jobsub>
+    <datatier>full-reconstructed</datatier>
+    <defname>&name;_&tag;_reco</defname>
+
+  </stage>
+
+  <stage name="reconana">
+
+    <fcl>/pnfs/dune/resilient/users/vpec/mikes_pdk/fcl/pdk_reco_ana.fcl</fcl>
+    <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/reconana/&name;</workdir>
+
+    <previousstage>reco</previousstage>
+
+    <logdir>/pnfs/dune/scratch/users/vpec/log/&release;/reconana/&name;</logdir>
+    <outdir>/pnfs/dune/scratch/users/vpec/data/&release;/reconana/&name;</outdir>
+
+    <TFileName>&name;_${PROCESS}_reconana.root</TFileName>
+
+    <numjobs>250</numjobs>
+
+    <disk>4GB</disk>
+    <memory>2000</memory>
+    <jobsub>--expected-lifetime=3h</jobsub>
+
+    <defname>&name;_&tag;_reconana</defname>
+    <ana>1</ana>
+
+  </stage>
+
+  <stage name="ana">
+
+    <fcl>/pnfs/dune/resilient/users/vpec/mikes_pdk/fcl/pdk_analysis_reco.fcl</fcl>
+    <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/ana/&name;</workdir>
+
+    <previousstage>reco</previousstage>
+
+    <logdir>/pnfs/dune/scratch/users/vpec/log/&release;/ana/&name;</logdir>
+    <outdir>/pnfs/dune/scratch/users/vpec/data/&release;/ana/&name;</outdir>
+
+    <TFileName>&name;_${PROCESS}_ana.root</TFileName>
+
+    <numjobs>250</numjobs>
+
+    <disk>4GB</disk>
+    <memory>2000</memory>
+    <jobsub>--expected-lifetime=3h</jobsub>
+
+    <defname>&name;_&tag;_ana</defname>
+    <ana>1</ana>
+
+  </stage>
+
+  <!-- file type -->
+  <filetype>&file_type;</filetype>
+
+  <!-- run type -->
+  <runtype>&run_type;</runtype>
+
+</project>
