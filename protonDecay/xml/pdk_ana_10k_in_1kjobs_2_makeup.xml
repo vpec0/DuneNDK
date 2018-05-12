@@ -6,8 +6,8 @@
 <!ENTITY release "v06_67_01">
 <!ENTITY file_type "mc">
 <!ENTITY run_type "physics">
-<!ENTITY name "pdkcosmobg_10k_in_1kjobs_1">
-<!ENTITY list_name "mctruth_files_10k_1.list">
+<!ENTITY name "pdkcosmobg_10k_in_1kjobs_2">
+<!ENTITY list_name "mctruth_files_10k_2.list">
 <!ENTITY tag "vpec">
 ]>
 
@@ -51,10 +51,10 @@
     <output>&name;_${PROCESS}_%tc_filter_detsim.root</output>
     <TFileName>&name;_${PROCESS}_filter_detsim_hist.root</TFileName>
 
-    <numjobs>1000</numjobs>
+    <numjobs>7</numjobs>
     <disk>4GB</disk>
-    <memory>2500</memory>
-    <jobsub>--expected-lifetime=8h</jobsub>
+    <memory>4500</memory>
+    <jobsub>--expected-lifetime=10h</jobsub>
     <!-- <maxfilesperjob>18</maxfilesperjob> -->
     <!-- <numevents>10</numevents> -->
     <defname>&name;_&tag;_detsim</defname>
@@ -94,7 +94,7 @@
 
     <TFileName>&name;_${PROCESS}_reconana.root</TFileName>
 
-    <numjobs>228</numjobs>
+    <numjobs>250</numjobs>
 
     <disk>4GB</disk>
     <memory>2000</memory>
@@ -103,7 +103,6 @@
     <defname>&name;_&tag;_reconana</defname>
     <ana>1</ana>
 
-    <merge>hadd</merge>
   </stage>
 
   <stage name="ana">
@@ -118,7 +117,7 @@
 
     <TFileName>&name;_${PROCESS}_ana.root</TFileName>
 
-    <numjobs>228</numjobs>
+    <numjobs>250</numjobs>
 
     <disk>4GB</disk>
     <memory>2000</memory>
@@ -127,7 +126,6 @@
     <defname>&name;_&tag;_ana</defname>
     <ana>1</ana>
 
-    <merge>hadd</merge>
   </stage>
 
   <!-- file type -->

@@ -3,7 +3,7 @@
 <!-- Production Project -->
 
 <!DOCTYPE project [
-<!ENTITY release "v06_67_01">
+<!ENTITY release "v06_71_00">
 <!ENTITY file_type "mc">
 <!ENTITY run_type "physics">
 <!ENTITY name "pdkcosmobg_10k_in_1kjobs_1">
@@ -27,7 +27,7 @@
   <larsoft>
     <tag>&release;</tag>
     <qual>e15:prof</qual>
-    <local>/pnfs/dune/resilient/users/vpec/mikes_pdk/pdk_dunetpc.tar</local>
+    <local>/pnfs/dune/resilient/users/vpec/mikes_pdk/pdk_dunetpc_&release;.tar</local>
   </larsoft>
 
   <!-- dune10kt metadata parameters -->
@@ -65,17 +65,19 @@
     <fcl>/pnfs/dune/resilient/users/vpec/mikes_pdk/fcl/pdk_reco.fcl</fcl>
     <workdir>/pnfs/dune/scratch/users/vpec/work/&release;/reco/&name;</workdir>
 
+    <inputlist>/pnfs/dune/scratch/users/vpec/log/v06_67_01/reco/&name;/missing_files.list</inputlist>
+
     <logdir>/pnfs/dune/scratch/users/vpec/log/&release;/reco/&name;</logdir>
     <outdir>/pnfs/dune/scratch/users/vpec/data/&release;/reco/&name;</outdir>
     <output>&name;_${PROCESS}_%tc_reco.root</output>
     <TFileName>&name;_${PROCESS}_reco_hist.root</TFileName>
 
 
-    <numjobs>1000</numjobs>
+    <numjobs>1</numjobs>
     <!-- <maxfilesperjob>1</maxfilesperjob> -->
     <!-- <numevents>2</numevents> -->
     <disk>4GB</disk>
-    <memory>2500</memory>
+    <memory>6000</memory>
     <jobsub>--expected-lifetime=8h</jobsub>
     <datatier>full-reconstructed</datatier>
     <defname>&name;_&tag;_reco</defname>
@@ -94,16 +96,15 @@
 
     <TFileName>&name;_${PROCESS}_reconana.root</TFileName>
 
-    <numjobs>228</numjobs>
+    <numjobs>1</numjobs>
 
     <disk>4GB</disk>
-    <memory>2000</memory>
+    <memory>6000</memory>
     <jobsub>--expected-lifetime=3h</jobsub>
 
     <defname>&name;_&tag;_reconana</defname>
     <ana>1</ana>
 
-    <merge>hadd</merge>
   </stage>
 
   <stage name="ana">
@@ -118,16 +119,15 @@
 
     <TFileName>&name;_${PROCESS}_ana.root</TFileName>
 
-    <numjobs>228</numjobs>
+    <numjobs>1</numjobs>
 
     <disk>4GB</disk>
-    <memory>2000</memory>
+    <memory>6000</memory>
     <jobsub>--expected-lifetime=3h</jobsub>
 
     <defname>&name;_&tag;_ana</defname>
     <ana>1</ana>
 
-    <merge>hadd</merge>
   </stage>
 
   <!-- file type -->

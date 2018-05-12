@@ -94,10 +94,10 @@
 
     <TFileName>&name;_${PROCESS}_reconana.root</TFileName>
 
-    <numjobs>250</numjobs>
+    <numjobs>1</numjobs>
 
     <disk>4GB</disk>
-    <memory>2000</memory>
+    <memory>5000</memory>
     <jobsub>--expected-lifetime=3h</jobsub>
 
     <defname>&name;_&tag;_reconana</defname>
@@ -117,10 +117,10 @@
 
     <TFileName>&name;_${PROCESS}_ana.root</TFileName>
 
-    <numjobs>250</numjobs>
+    <numjobs>1</numjobs>
 
     <disk>4GB</disk>
-    <memory>2000</memory>
+    <memory>5000</memory>
     <jobsub>--expected-lifetime=3h</jobsub>
 
     <defname>&name;_&tag;_ana</defname>
