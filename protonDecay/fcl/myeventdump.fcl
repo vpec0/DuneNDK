@@ -1,0 +1,6 @@
+#include "eventdump.fcl"
+
+process_name: Dump
+
+
+source.inputCommands: [ "keep *_*_*_*", "drop sumdata::RunData_*_*_*" ]
