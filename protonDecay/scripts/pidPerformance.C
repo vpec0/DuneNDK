@@ -11,6 +11,7 @@
 #include "TH1D.h"
 #include "TH1I.h"
 #include "TH2I.h"
+#include "THStack.h"
 
 #include <iostream>
 #include <string>
@@ -22,7 +23,7 @@ void pidPerformance() {
   const int kMaxParticles = 1000;
   const int kMaxOtherParticles = 10;
 
-  TFile* inFile = new TFile("data/reconana_anahist.root","r");
+  TFile* inFile = new TFile("data/10k/reconana_hists_merged.root","r");
   TTree* inTree = (TTree*)inFile->Get("pdkreconana/ReconPerformance");
   if (!inTree) {
     std::cout << "Input tree not found." << std::endl;
@@ -190,9 +191,10 @@ void pidPerformance() {
   TH1D* hPionTrackPionPID     = new TH1D("PionTrackPionPID",    ";True Deposited Energy (GeV);",100,0,3);
   TH1D* hPionTrackOtherPID    = new TH1D("PionTrackOtherPID",   ";True Deposited Energy (GeV);",100,0,3);
 
+
   for (int event = 0; event < inTree->GetEntriesFast(); ++event) {
 
-    if (event % 1000 == 0)
+    if (event % 10000 == 0)
       std::cout << "Processing event " << event << std::endl;
 
     inTree->GetEntry(event);
@@ -205,7 +207,7 @@ void pidPerformance() {
   	  best_plane = plane;
   	  largest_nhits = fTrackReconHits[track][plane];
   	}
-  	if (fTrackPIDA[track][plane] == 0)
+  	if (fTrackPIDA[track][plane] == 0.)
   	  continue;
   	if (fTrackPDG[track] == 2212) {
   	  hTrueProtonEnergy->Fill(fTrackDepositedEnergy[track]);
@@ -214,6 +216,7 @@ void pidPerformance() {
   	else if (TMath::Abs(fTrackPDG[track]) == 13) {
   	  hTrueMuonEnergy->Fill(fTrackDepositedEnergy[track]);
   	  hMuonPIDA->Fill(fTrackPIDA[track][plane]);
+	  //cout<<"Muon PIDA: "<<fTrackPIDA[track][plane]<<endl;
   	}
   	else if (fTrackPDG[track] == 321) {
   	  hTrueKaonEnergy->Fill(fTrackDepositedEnergy[track]);
@@ -430,26 +433,40 @@ void pidPerformance() {
   } // event
 
   TCanvas* canv = new TCanvas("canv","",800,600);
-  hProtonPIDA->Scale(1./hProtonPIDA->GetEntries());
+  if (hProtonPIDA->GetEntries() > 0)
+      hProtonPIDA->Scale(1./hProtonPIDA->GetEntries());
   hProtonPIDA->SetLineColor(1);
   hProtonPIDA->SetFillColor(1);
   hProtonPIDA->SetFillStyle(3003);
-  hMuonPIDA->Scale(1./hMuonPIDA->GetEntries());
+  if (hMuonPIDA->GetEntries() > 0)
+      hMuonPIDA->Scale(1./hMuonPIDA->GetEntries());
   hMuonPIDA->SetLineColor(2);
   hMuonPIDA->SetFillColor(2);
   hMuonPIDA->SetFillStyle(3003);
-  hKaonPIDA->Scale(1./hKaonPIDA->GetEntries());
+  if (hKaonPIDA->GetEntries() > 0)
+      hKaonPIDA->Scale(1./hKaonPIDA->GetEntries());
   hKaonPIDA->SetLineColor(3);
   hKaonPIDA->SetFillColor(3);
   hKaonPIDA->SetFillStyle(3003);
-  hPionPIDA->Scale(1./hPionPIDA->GetEntries());
+  if (hPionPIDA->GetEntries() > 0)
+      hPionPIDA->Scale(1./hPionPIDA->GetEntries());
   hPionPIDA->SetLineColor(4);
   hPionPIDA->SetFillColor(4);
   hPionPIDA->SetFillStyle(3003);
-  hKaonPIDA->Draw("hist");
-  hMuonPIDA->Draw("hist same");
-  hProtonPIDA->Draw("hist same");
-  hPionPIDA->Draw("hist same");
+
+  THStack* hsPIDA = new THStack("hsPIDA", ";PIDA");
+
+  hsPIDA->Add(hKaonPIDA,"hist");
+  hsPIDA->Add(hMuonPIDA, "hist");
+  hsPIDA->Add(hProtonPIDA, "hist");
+  hsPIDA->Add(hPionPIDA, "hist");
+
+  hsPIDA->Draw("nostack");
+  // hKaonPIDA->Draw("hist");
+  // hMuonPIDA->Draw("hist same");
+  // hProtonPIDA->Draw("hist same");
+  // hPionPIDA->Draw("hist same");
+
   TLegend* leg = new TLegend(0.6,0.7,0.9,0.9);
   leg->AddEntry(hProtonPIDA, "Proton", "f");
   leg->AddEntry(hMuonPIDA,   "Muon",   "f");
@@ -460,26 +477,42 @@ void pidPerformance() {
 
   canv->cd();
   canv->Clear();
-  hProtonPIDAPlane->Scale(1./hProtonPIDAPlane->GetEntries());
+
+  if (hProtonPIDAPlane->GetEntries() > 0)
+      hProtonPIDAPlane->Scale(1./hProtonPIDAPlane->GetEntries());
   hProtonPIDAPlane->SetLineColor(1);
   hProtonPIDAPlane->SetFillColor(1);
   hProtonPIDAPlane->SetFillStyle(3003);
-  hMuonPIDAPlane->Scale(1./hMuonPIDAPlane->GetEntries());
+  if (hMuonPIDAPlane->GetEntries() > 0)
+      hMuonPIDAPlane->Scale(1./hMuonPIDAPlane->GetEntries());
   hMuonPIDAPlane->SetLineColor(2);
   hMuonPIDAPlane->SetFillColor(2);
   hMuonPIDAPlane->SetFillStyle(3003);
-  hKaonPIDAPlane->Scale(1./hKaonPIDAPlane->GetEntries());
+  if (hKaonPIDAPlane->GetEntries() > 0)
+      hKaonPIDAPlane->Scale(1./hKaonPIDAPlane->GetEntries());
   hKaonPIDAPlane->SetLineColor(3);
   hKaonPIDAPlane->SetFillColor(3);
   hKaonPIDAPlane->SetFillStyle(3003);
-  hPionPIDAPlane->Scale(1./hPionPIDAPlane->GetEntries());
+  if (hPionPIDAPlane->GetEntries() > 0)
+      hPionPIDAPlane->Scale(1./hPionPIDAPlane->GetEntries());
   hPionPIDAPlane->SetLineColor(4);
   hPionPIDAPlane->SetFillColor(4);
   hPionPIDAPlane->SetFillStyle(3003);
-  hKaonPIDAPlane->Draw("hist");
-  hMuonPIDAPlane->Draw("hist same");
-  hProtonPIDAPlane->Draw("hist same");
-  hPionPIDAPlane->Draw("hist same");
+
+  THStack* hsPIDAPlane = new THStack("hsPIDAPlane", ";PIDA");
+
+  hsPIDAPlane->Add(hKaonPIDAPlane, "hist");
+  hsPIDAPlane->Add(hMuonPIDAPlane, "hist");
+  hsPIDAPlane->Add(hProtonPIDAPlane, "hist");
+  hsPIDAPlane->Add(hPionPIDAPlane, "hist");
+
+  hsPIDAPlane->Draw("nostack");
+
+  // hKaonPIDAPlane->Draw("hist");
+  // hMuonPIDAPlane->Draw("hist same");
+  // hProtonPIDAPlane->Draw("hist same");
+  // hPionPIDAPlane->Draw("hist same");
+
   leg->Clear();
   leg->AddEntry(hProtonPIDAPlane, "Proton", "f");
   leg->AddEntry(hMuonPIDAPlane,   "Muon",   "f");

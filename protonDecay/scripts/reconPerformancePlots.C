@@ -3,7 +3,7 @@
   const int kMaxParticles = 1000000;
 
   // TFile* inFile = new TFile("pdk_recon_ana.root");
-  TFile* inFile = new TFile("/pnfs/dune/scratch/users/wallbank/v06_45_01/reconana/pdkcosmobg/anahist.root");
+  TFile* inFile = new TFile("data/reconana_anahist.root","r");
   TTree* inTree = (TTree*)inFile->Get("pdkreconana/ReconPerformance");
 
   TProfile* hKaonAll = new TProfile("KaonAll",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
@@ -30,9 +30,9 @@
   int fNHits2cm;
   int fNParticles;
   int fPDG[kMaxParticles];
-  double fTrueEnergy[kMaxParticles];
+  Float_t fTrueEnergy[kMaxParticles];
   int fNTracks[kMaxParticles];
-  double fEfficiency[kMaxParticles];
+  Float_t fEfficiency[kMaxParticles];
   inTree->SetBranchAddress("NKaons",     &fNKaons);
   inTree->SetBranchAddress("NMuons",     &fNMuons);
   inTree->SetBranchAddress("NMuons20cm", &fNMuons20cm);
@@ -126,7 +126,7 @@
   leg->AddEntry(hKaonNoMuon,"and No space points within 2cm of walls","l");
   hKaonNoHits->Draw("same");
   leg->Draw("same");
-  canv->SaveAs("KaonReco.eps");
+  canv->SaveAs("plots/KaonReco.pdf");
   delete leg;
 
   canv->cd();
@@ -148,7 +148,7 @@
   leg->AddEntry(hMuonNoMuon,"and No space points within 2cm of walls","l");
   hMuonNoHits->Draw("same");
   leg->Draw("same");
-  canv->SaveAs("MuonReco.eps");
+  canv->SaveAs("plots/MuonReco.pdf");
   delete leg;
 
   canv->cd();
@@ -170,7 +170,7 @@
   leg->AddEntry(hProtonNoMuon,"and No space points within 2cm of walls","l");
   hProtonNoHits->Draw("same");
   leg->Draw("same");
-  canv->SaveAs("ProtonReco.eps");
+  canv->SaveAs("plots/ProtonReco.pdf");
   delete leg;
 
   return;
