@@ -1,28 +1,31 @@
 {
 
+  TString outputdir = "plots/10k_1/recon_performance";
+
+
   const int kMaxParticles = 1000000;
 
   // TFile* inFile = new TFile("pdk_recon_ana.root");
-  TFile* inFile = new TFile("data/reconana_anahist.root","r");
+  TFile* inFile = new TFile("data/10k/reconana_hists_merged.root","r");
   TTree* inTree = (TTree*)inFile->Get("pdkreconana/ReconPerformance");
 
-  TProfile* hKaonAll = new TProfile("KaonAll",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hKaonKaon = new TProfile("KaonKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hKaonOneKaon = new TProfile("KaonOneKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hKaonNoMuon = new TProfile("KaonNoMuon",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hKaonNoHits = new TProfile("KaonNoHits",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
+  TProfile* hKaonAll = new TProfile("KaonAll",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hKaonKaon = new TProfile("KaonKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hKaonOneKaon = new TProfile("KaonOneKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hKaonNoMuon = new TProfile("KaonNoMuon",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hKaonNoHits = new TProfile("KaonNoHits",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
 
-  TProfile* hMuonAll = new TProfile("MuonAll",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hMuonKaon = new TProfile("MuonKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hMuonOneKaon = new TProfile("MuonOneKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hMuonNoMuon = new TProfile("MuonNoMuon",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hMuonNoHits = new TProfile("MuonNoHits",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
+  TProfile* hMuonAll = new TProfile("MuonAll",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hMuonKaon = new TProfile("MuonKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hMuonOneKaon = new TProfile("MuonOneKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hMuonNoMuon = new TProfile("MuonNoMuon",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hMuonNoHits = new TProfile("MuonNoHits",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
 
-  TProfile* hProtonAll = new TProfile("ProtonAll",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hProtonKaon = new TProfile("ProtonKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hProtonOneKaon = new TProfile("ProtonOneKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hProtonNoMuon = new TProfile("ProtonNoMuon",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
-  TProfile* hProtonNoHits = new TProfile("ProtonNoHits",";True Energy (MeV);Reconstruction efficiency;",100,0,100000);
+  TProfile* hProtonAll = new TProfile("ProtonAll",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hProtonKaon = new TProfile("ProtonKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hProtonOneKaon = new TProfile("ProtonOneKaon",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hProtonNoMuon = new TProfile("ProtonNoMuon",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
+  TProfile* hProtonNoHits = new TProfile("ProtonNoHits",";True Energy (MeV);Reconstruction efficiency;",100,0,100);
 
   int fNKaons;
   int fNMuons;
@@ -46,7 +49,7 @@
   // look through events
   for (int event = 0; event < inTree->GetEntriesFast(); ++event) {
 
-    if (event % 1000 == 0)
+    if (event % 10000 == 0)
       std::cout << "Analysing event " << event << " out of " << inTree->GetEntriesFast() << std::endl;
 
     inTree->GetEntry(event);
@@ -126,7 +129,7 @@
   leg->AddEntry(hKaonNoMuon,"and No space points within 2cm of walls","l");
   hKaonNoHits->Draw("same");
   leg->Draw("same");
-  canv->SaveAs("plots/KaonReco.pdf");
+  canv->SaveAs(outputdir+"/KaonReco.pdf");
   delete leg;
 
   canv->cd();
@@ -148,7 +151,7 @@
   leg->AddEntry(hMuonNoMuon,"and No space points within 2cm of walls","l");
   hMuonNoHits->Draw("same");
   leg->Draw("same");
-  canv->SaveAs("plots/MuonReco.pdf");
+  canv->SaveAs(outputdir+"/MuonReco.pdf");
   delete leg;
 
   canv->cd();
@@ -170,7 +173,7 @@
   leg->AddEntry(hProtonNoMuon,"and No space points within 2cm of walls","l");
   hProtonNoHits->Draw("same");
   leg->Draw("same");
-  canv->SaveAs("plots/ProtonReco.pdf");
+  canv->SaveAs(outputdir+"/ProtonReco.pdf");
   delete leg;
 
   return;

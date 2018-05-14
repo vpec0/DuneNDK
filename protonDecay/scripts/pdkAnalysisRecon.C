@@ -48,7 +48,20 @@ void pdkAnalysisRecon() {
   edges[2][0]=-1;
   edges[2][1]=5808.87;
 
-  TFile* inFile = new TFile("data/ana_anahist.root","r");
+  // from dune10kt_v1.gdml:
+  /**
+   * top: 627.58 (LAr) position w.r.t to Envelope -100
+   * bottom: -677.58 (-100)
+   * left/right: 745.744
+   * front/back: 0/6159.35 ?
+   * frame 10.16 cm thick
+   * first vertical beam placed at -2772.60
+   * last vertical beam at 3024.60
+   * top of top APA beam at 581.80
+   * bottom of bottom beam at -623.30
+   **/
+
+  TFile* inFile = new TFile("data/10k/ana_hists_merged.root","r");
   TTree* tree = (TTree*)inFile->Get("pdkrecon/PDKRecon");
   if (!tree) {
     std::cout << "Input tree not found." << std::endl;
@@ -91,7 +104,7 @@ void pdkAnalysisRecon() {
 
     tree->GetEntry(event);
 
-    if (event%1000 == 0)
+    if (event%10000 == 0)
       std::cout << "Processing event " << event << std::endl;
 
     float totalDepositedEnergy = 0;
@@ -242,7 +255,7 @@ void pdkAnalysisRecon() {
   leg->AddEntry(hCutKaonEnergy,         cutKaonEnergy.str().c_str(),         "l");
   leg->AddEntry(hCutKaonMass,           cutKaonMass.str().c_str(),           "l");
   leg->Draw();
-  canv->SaveAs("plots/PDKReconSelection.pdf");
+  canv->SaveAs("plots/10k_1/pdk_selection/PDKReconSelection.pdf");
   canv->SetLogy(0);
 
   return;

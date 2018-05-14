@@ -17,6 +17,9 @@
 #include <string>
 #include <map>
 
+
+TString outputdir = "plots/10k_1/pid_performance";
+
 void pidPerformance() {
 
   gStyle->SetOptStat(0);
@@ -473,7 +476,8 @@ void pidPerformance() {
   leg->AddEntry(hKaonPIDA,   "Kaon",   "f");
   leg->AddEntry(hPionPIDA,   "Pion",   "f");
   leg->Draw();
-  canv->SaveAs("plots/PIDA.pdf");
+  //leg->SetFillStyle(4000);
+  canv->SaveAs(outputdir+"/PIDA.pdf");
 
   canv->cd();
   canv->Clear();
@@ -519,7 +523,7 @@ void pidPerformance() {
   leg->AddEntry(hKaonPIDAPlane,   "Kaon",   "f");
   leg->AddEntry(hPionPIDAPlane,   "Pion",   "f");
   leg->Draw();
-  canv->SaveAs("plots/PIDAPlane.pdf");
+  canv->SaveAs(outputdir+"/PIDAPlane.pdf");
 
   canv->cd();
   canv->Clear();
@@ -551,7 +555,7 @@ void pidPerformance() {
   leg->AddEntry(hProtonPionPID,   "Pion",   "f");
   leg->AddEntry(hProtonOtherPID,  "Other",  "f");
   leg->Draw();
-  canv->SaveAs("plots/ProtonPID.pdf");
+  canv->SaveAs(outputdir+"/ProtonPID.pdf");
   canv->SetLogy(0);
 
   canv->cd();
@@ -584,7 +588,7 @@ void pidPerformance() {
   leg->AddEntry(hMuonPionPID,   "Pion",   "f");
   leg->AddEntry(hMuonOtherPID,  "Other",  "f");
   leg->Draw();
-  canv->SaveAs("plots/MuonPID.pdf");
+  canv->SaveAs(outputdir+"/MuonPID.pdf");
   canv->SetLogy(0);
 
   canv->cd();
@@ -616,7 +620,7 @@ void pidPerformance() {
   leg->AddEntry(hKaonPionPID,   "Pion",   "f");
   leg->AddEntry(hKaonOtherPID,  "Other",  "f");
   leg->Draw();
-  canv->SaveAs("plots/KaonPID.pdf");
+  canv->SaveAs(outputdir+"/KaonPID.pdf");
 
   canv->cd();
   canv->Clear();
@@ -648,7 +652,7 @@ void pidPerformance() {
   leg->AddEntry(hPionPionPID,   "Pion",   "f");
   leg->AddEntry(hPionOtherPID,  "Other",  "f");
   leg->Draw();
-  canv->SaveAs("plots/PionPID.pdf");
+  canv->SaveAs(outputdir+"/PionPID.pdf");
   canv->SetLogy(0);
 
   canv->cd();
@@ -681,7 +685,7 @@ void pidPerformance() {
   leg->AddEntry(hProtonTrackPionPID,   "Pion",   "f");
   leg->AddEntry(hProtonTrackOtherPID,  "Other",  "f");
   leg->Draw();
-  canv->SaveAs("plots/ProtonTrackPID.pdf");
+  canv->SaveAs(outputdir+"/ProtonTrackPID.pdf");
   canv->SetLogy(0);
 
   canv->cd();
@@ -714,7 +718,7 @@ void pidPerformance() {
   leg->AddEntry(hMuonTrackPionPID,   "Pion",   "f");
   leg->AddEntry(hMuonTrackOtherPID,  "Other",  "f");
   leg->Draw();
-  canv->SaveAs("plots/MuonTrackPID.pdf");
+  canv->SaveAs(outputdir+"/MuonTrackPID.pdf");
   canv->SetLogy(0);
 
   canv->cd();
@@ -746,7 +750,7 @@ void pidPerformance() {
   leg->AddEntry(hKaonTrackPionPID,   "Pion",   "f");
   leg->AddEntry(hKaonTrackOtherPID,  "Other",  "f");
   leg->Draw();
-  canv->SaveAs("plots/KaonTrackPID.pdf");
+  canv->SaveAs(outputdir+"/KaonTrackPID.pdf");
 
   canv->cd();
   canv->Clear();
@@ -778,19 +782,19 @@ void pidPerformance() {
   leg->AddEntry(hPionTrackPionPID,   "Pion",   "f");
   leg->AddEntry(hPionTrackOtherPID,  "Other",  "f");
   leg->Draw();
-  canv->SaveAs("plots/PionTrackPID.pdf");
+  canv->SaveAs(outputdir+"/PionTrackPID.pdf");
   canv->SetLogy(0);
 
   canv->cd();
   canv->Clear();
   hMisReconstruction->Draw("colz");
-  canv->SaveAs("plots/MisReconstruction.pdf");
+  canv->SaveAs(outputdir+"/MisReconstruction.pdf");
 
   canv->cd();
   canv->Clear();
   canv->SetLogz();
   hMisIdentification->Draw("colz");
-  canv->SaveAs("plots/MisIdentification.pdf");
+  canv->SaveAs(outputdir+"/MisIdentification.pdf");
   canv->SetLogz(0);
 
   canv->cd();
@@ -821,7 +825,8 @@ void pidPerformance() {
   leftleg->AddEntry(hKaonEfficiency,   "Kaon",   "f");
   leftleg->AddEntry(hPionEfficiency,   "Pion",   "f");
   leftleg->Draw();
-  canv->SaveAs("plots/ReconstructionEfficiency.pdf");
+  leftleg->SetFillStyle(4000);
+  canv->SaveAs(outputdir+"/ReconstructionEfficiency.pdf");
 
   canv->cd();
   canv->Clear();
@@ -851,7 +856,7 @@ void pidPerformance() {
   leftleg->AddEntry(hKaonPurity,   "Kaon",   "f");
   leftleg->AddEntry(hPionPurity,   "Pion",   "f");
   leftleg->Draw();
-  canv->SaveAs("plots/ReconstructionPurity.pdf");
+  canv->SaveAs(outputdir+"/ReconstructionPurity.pdf");
 
   canv->cd();
   canv->Clear();
@@ -878,7 +883,7 @@ void pidPerformance() {
   leg->AddEntry(hTrueKaonEnergy,   "Kaon",   "f");
   leg->AddEntry(hTruePionEnergy,   "Pion",   "f");
   leg->Draw();
-  canv->SaveAs("plots/TrueEnergy.pdf");
+  canv->SaveAs(outputdir+"/TrueEnergy.pdf");
   canv->SetLogy(0);
 
   canv->cd();
@@ -906,14 +911,14 @@ void pidPerformance() {
   leg->AddEntry(hReconKaonEnergy,   "Kaon",   "f");
   leg->AddEntry(hReconPionEnergy,   "Pion",   "f");
   leg->Draw();
-  canv->SaveAs("plots/ReconEnergy.pdf");
+  canv->SaveAs(outputdir+"/ReconEnergy.pdf");
   canv->SetLogy(0);
 
   canv->cd();
   canv->Clear();
   canv->SetLogz();
   hParticleEnergy->Draw("colz");
-  canv->SaveAs("plots/ParticleEnergy.pdf");
+  canv->SaveAs(outputdir+"/ParticleEnergy.pdf");
   canv->SetLogz(0);
 
   return;
